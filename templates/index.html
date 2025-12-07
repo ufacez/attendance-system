@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>📚 Attendance Monitoring System</h1>
+            <h1>Attendance Monitoring System</h1>
             <p class="subtitle">Manage students and track attendance efficiently</p>
         </header>
 
@@ -23,7 +23,7 @@
         <div id="students-tab" class="tab-content active">
             <div class="section-header">
                 <h2>Student Management</h2>
-                <button class="btn btn-primary" onclick="showAddStudentModal()">+ Add Student</button>
+                <button class="btn btn-primary" onclick="showAddStudentModal()">Add Student</button>
             </div>
 
             <div class="table-container">
@@ -62,14 +62,14 @@
                 <div class="form-group">
                     <label>Select Student:</label>
                     <select id="quick-student" class="form-control">
-                        <option value="">-- Select Student --</option>
+                        <option value="">Select Student</option>
                     </select>
                 </div>
                 <div class="status-buttons">
-                    <button class="btn btn-present" onclick="quickMarkAttendance('Present')">✓ Present</button>
-                    <button class="btn btn-absent" onclick="quickMarkAttendance('Absent')">✗ Absent</button>
-                    <button class="btn btn-late" onclick="quickMarkAttendance('Late')">⏰ Late</button>
-                    <button class="btn btn-excused" onclick="quickMarkAttendance('Excused')">📝 Excused</button>
+                    <button class="btn btn-present" onclick="quickMarkAttendance('Present')">Present</button>
+                    <button class="btn btn-absent" onclick="quickMarkAttendance('Absent')">Absent</button>
+                    <button class="btn btn-late" onclick="quickMarkAttendance('Late')">Late</button>
+                    <button class="btn btn-excused" onclick="quickMarkAttendance('Excused')">Excused</button>
                 </div>
             </div>
 
