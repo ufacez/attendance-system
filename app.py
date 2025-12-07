@@ -174,7 +174,4 @@ if __name__ == '__main__':
     # Watch Python files
     server.watch('*.py')
     
-    print("🔥 LiveReload is active! The page will auto-refresh on file changes.")
-    print("📚 Server running at http://localhost:5000")
-    
     server.serve(port=5000, host='localhost')
