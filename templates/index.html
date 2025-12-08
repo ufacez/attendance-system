@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>🎓 BSIT Attendance System</h1>
+            <h1>BSIT Attendance System</h1>
             <p class="subtitle">Our Lady of Fatima University</p>
             <div class="course-badge">Bachelor of Science in Information Technology</div>
         </header>
@@ -24,7 +24,7 @@
         <div id="students-tab" class="tab-content active">
             <div class="section-header">
                 <h2>BSIT Student Management</h2>
-                <button class="btn btn-primary" onclick="showAddStudentModal()">➕ Add BSIT Student</button>
+                <button class="btn btn-primary" onclick="showAddStudentModal()">Add BSIT Student</button>
             </div>
 
             <div class="table-container">
@@ -70,8 +70,8 @@
                         <option value="Dash 4">Dash 4</option>
                         <option value="Irregular">Irregular</option>
                     </select>
-                    <button class="btn btn-secondary" onclick="filterAttendance()">🔍 Filter</button>
-                    <button class="btn btn-secondary" onclick="loadAttendance()">📋 Show All</button>
+                    <button class="btn btn-secondary" onclick="filterAttendance()">Filter</button>
+                    <button class="btn btn-secondary" onclick="loadAttendance()">Show All</button>
                 </div>
             </div>
 
@@ -86,8 +86,8 @@
                 <div class="status-buttons">
                     <button class="btn btn-present" onclick="quickMarkAttendance('Present')">✓ Present</button>
                     <button class="btn btn-absent" onclick="quickMarkAttendance('Absent')">✗ Absent</button>
-                    <button class="btn btn-late" onclick="quickMarkAttendance('Late')">⏰ Late</button>
-                    <button class="btn btn-excused" onclick="quickMarkAttendance('Excused')">📝 Excused</button>
+                    <button class="btn btn-late" onclick="quickMarkAttendance('Late')">Late</button>
+                    <button class="btn btn-excused" onclick="quickMarkAttendance('Excused')">Excused</button>
                 </div>
             </div>
 
@@ -117,7 +117,7 @@
         <!-- Reports Tab -->
         <div id="reports-tab" class="tab-content">
             <div class="section-header">
-                <h2>📊 BSIT Reports & Analytics</h2>
+                <h2>BSIT Reports & Analytics</h2>
             </div>
 
             <div class="reports-grid">
@@ -125,27 +125,27 @@
                     <h3>🎓 Student Statistics</h3>
                     <div class="stat-value" id="total-students">0</div>
                     <p>Total BSIT Students</p>
-                    <button class="btn btn-secondary" onclick="exportStudents()">📥 Export Students CSV</button>
+                    <button class="btn btn-secondary" onclick="exportStudents()">Export Students CSV</button>
                 </div>
 
                 <div class="report-card">
-                    <h3>📋 Attendance Statistics</h3>
+                    <h3>Attendance Statistics</h3>
                     <div class="stat-value" id="total-records">0</div>
                     <p>Total Attendance Records</p>
-                    <button class="btn btn-secondary" onclick="exportAttendance()">📥 Export Attendance CSV</button>
+                    <button class="btn btn-secondary" onclick="exportAttendance()">Export Attendance CSV</button>
                 </div>
 
                 <div class="report-card">
-                    <h3>📅 Today's Summary</h3>
+                    <h3>Today's Summary</h3>
                     <div id="today-summary">
-                        <div class="summary-item">✓ Present: <span id="today-present">0</span></div>
-                        <div class="summary-item">✗ Absent: <span id="today-absent">0</span></div>
-                        <div class="summary-item">⏰ Late: <span id="today-late">0</span></div>
+                        <div class="summary-item">Present: <span id="today-present">0</span></div>
+                        <div class="summary-item">Absent: <span id="today-absent">0</span></div>
+                        <div class="summary-item">Late: <span id="today-late">0</span></div>
                     </div>
                 </div>
 
                 <div class="report-card">
-                    <h3>📚 Year Level Distribution</h3>
+                    <h3>Year Level Distribution</h3>
                     <div id="year-stats">
                         <div class="summary-item">No data available</div>
                     </div>
@@ -198,7 +198,7 @@
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">💾 Save Student</button>
+                    <button type="submit" class="btn btn-primary">Save Student</button>
                 </div>
             </form>
         </div>
