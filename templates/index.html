@@ -9,6 +9,20 @@
 <body>
     <div class="container">
         <header>
+            <!-- Left Logo -->
+            <div class="header-logo-left">
+                <!-- Replace src with your logo path -->
+                <img src="{{ url_for('static', filename='images/logo-left.png') }}" alt="Left Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="logo-placeholder" style="display: none;">L</div>
+            </div>
+            
+            <!-- Right Logo -->
+            <div class="header-logo-right">
+                <!-- Replace src with your logo path -->
+                <img src="{{ url_for('static', filename='images/logo-right.png') }}" alt="Right Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="logo-placeholder" style="display: none;">R</div>
+            </div>
+            
             <h1>BSIT Attendance System</h1>
             <p class="subtitle">Our Lady of Fatima University</p>
             <div class="course-badge">Bachelor of Science in Information Technology</div>
