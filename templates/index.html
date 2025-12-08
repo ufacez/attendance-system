@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Monitoring System</title>
+    <title>BSIT Attendance Monitoring System - OLFU</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Attendance Monitoring System</h1>
-            <p class="subtitle">Manage students and track attendance efficiently</p>
+            <h1>🎓 BSIT Attendance System</h1>
+            <p class="subtitle">Our Lady of Fatima University</p>
+            <div class="course-badge">Bachelor of Science in Information Technology</div>
         </header>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('students')">Students</button>
+            <button class="tab-btn active" onclick="showTab('students')">BSIT Students</button>
             <button class="tab-btn" onclick="showTab('attendance')">Attendance</button>
             <button class="tab-btn" onclick="showTab('reports')">Reports</button>
         </div>
@@ -22,8 +23,8 @@
         <!-- Students Tab -->
         <div id="students-tab" class="tab-content active">
             <div class="section-header">
-                <h2>Student Management</h2>
-                <button class="btn btn-primary" onclick="showAddStudentModal()">Add Student</button>
+                <h2>BSIT Student Management</h2>
+                <button class="btn btn-primary" onclick="showAddStudentModal()">➕ Add BSIT Student</button>
             </div>
 
             <div class="table-container">
@@ -33,13 +34,15 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Year Level</th>
+                            <th>Section</th>
                             <th>Created At</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="students-tbody">
                         <tr>
-                            <td colspan="5" class="text-center">Loading...</td>
+                            <td colspan="7" class="text-center">Loading BSIT students...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -52,24 +55,39 @@
                 <h2>Mark Attendance</h2>
                 <div class="date-filter">
                     <input type="date" id="attendance-date" class="date-input">
-                    <button class="btn btn-secondary" onclick="filterAttendance()">Filter</button>
-                    <button class="btn btn-secondary" onclick="loadAttendance()">Show All</button>
+                    <select id="filter-year" class="form-control" style="width: auto;">
+                        <option value="">All Years</option>
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                        <option value="3rd Year">3rd Year</option>
+                        <option value="4th Year">4th Year</option>
+                    </select>
+                    <select id="filter-section" class="form-control" style="width: auto;">
+                        <option value="">All Sections</option>
+                        <option value="Dash 1">Dash 1</option>
+                        <option value="Dash 2">Dash 2</option>
+                        <option value="Dash 3">Dash 3</option>
+                        <option value="Dash 4">Dash 4</option>
+                        <option value="Irregular">Irregular</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="filterAttendance()">🔍 Filter</button>
+                    <button class="btn btn-secondary" onclick="loadAttendance()">📋 Show All</button>
                 </div>
             </div>
 
             <div class="quick-attendance">
                 <h3>Quick Mark Attendance</h3>
                 <div class="form-group">
-                    <label>Select Student:</label>
+                    <label>Select BSIT Student:</label>
                     <select id="quick-student" class="form-control">
-                        <option value="">Select Student</option>
+                        <option value="">-- Select BSIT Student --</option>
                     </select>
                 </div>
                 <div class="status-buttons">
-                    <button class="btn btn-present" onclick="quickMarkAttendance('Present')">Present</button>
-                    <button class="btn btn-absent" onclick="quickMarkAttendance('Absent')">Absent</button>
-                    <button class="btn btn-late" onclick="quickMarkAttendance('Late')">Late</button>
-                    <button class="btn btn-excused" onclick="quickMarkAttendance('Excused')">Excused</button>
+                    <button class="btn btn-present" onclick="quickMarkAttendance('Present')">✓ Present</button>
+                    <button class="btn btn-absent" onclick="quickMarkAttendance('Absent')">✗ Absent</button>
+                    <button class="btn btn-late" onclick="quickMarkAttendance('Late')">⏰ Late</button>
+                    <button class="btn btn-excused" onclick="quickMarkAttendance('Excused')">📝 Excused</button>
                 </div>
             </div>
 
@@ -79,6 +97,8 @@
                         <tr>
                             <th>ID</th>
                             <th>Student Name</th>
+                            <th>Year Level</th>
+                            <th>Section</th>
                             <th>Date</th>
                             <th>Status</th>
                             <th>Notes</th>
@@ -87,7 +107,7 @@
                     </thead>
                     <tbody id="attendance-tbody">
                         <tr>
-                            <td colspan="6" class="text-center">Loading...</td>
+                            <td colspan="8" class="text-center">Loading attendance records...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -97,56 +117,88 @@
         <!-- Reports Tab -->
         <div id="reports-tab" class="tab-content">
             <div class="section-header">
-                <h2>Reports & Export</h2>
+                <h2>📊 BSIT Reports & Analytics</h2>
             </div>
 
             <div class="reports-grid">
                 <div class="report-card">
-                    <h3>Student Statistics</h3>
+                    <h3>🎓 Student Statistics</h3>
                     <div class="stat-value" id="total-students">0</div>
-                    <p>Total Students</p>
-                    <button class="btn btn-secondary" onclick="exportStudents()">Export Students CSV</button>
+                    <p>Total BSIT Students</p>
+                    <button class="btn btn-secondary" onclick="exportStudents()">📥 Export Students CSV</button>
                 </div>
 
                 <div class="report-card">
-                    <h3>Attendance Statistics</h3>
+                    <h3>📋 Attendance Statistics</h3>
                     <div class="stat-value" id="total-records">0</div>
                     <p>Total Attendance Records</p>
-                    <button class="btn btn-secondary" onclick="exportAttendance()">Export Attendance CSV</button>
+                    <button class="btn btn-secondary" onclick="exportAttendance()">📥 Export Attendance CSV</button>
                 </div>
 
                 <div class="report-card">
-                    <h3>Today's Summary</h3>
+                    <h3>📅 Today's Summary</h3>
                     <div id="today-summary">
-                        <div class="summary-item">Present: <span id="today-present">0</span></div>
-                        <div class="summary-item">Absent: <span id="today-absent">0</span></div>
-                        <div class="summary-item">Late: <span id="today-late">0</span></div>
+                        <div class="summary-item">✓ Present: <span id="today-present">0</span></div>
+                        <div class="summary-item">✗ Absent: <span id="today-absent">0</span></div>
+                        <div class="summary-item">⏰ Late: <span id="today-late">0</span></div>
+                    </div>
+                </div>
+
+                <div class="report-card">
+                    <h3>📚 Year Level Distribution</h3>
+                    <div id="year-stats">
+                        <div class="summary-item">No data available</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Add Student Modal -->
+    <!-- Add/Edit Student Modal -->
     <div id="student-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modal-title">Add Student</h2>
+                <h2 id="modal-title">Add BSIT Student</h2>
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
             <form id="student-form" onsubmit="saveStudent(event)">
                 <input type="hidden" id="student-id">
                 <div class="form-group">
-                    <label for="student-name">Name *</label>
-                    <input type="text" id="student-name" class="form-control" required>
+                    <label for="student-name">Full Name *</label>
+                    <input type="text" id="student-name" class="form-control" required placeholder="Enter student full name">
                 </div>
                 <div class="form-group">
-                    <label for="student-email">Email *</label>
-                    <input type="email" id="student-email" class="form-control" required>
+                    <label for="student-email">Email Address *</label>
+                    <input type="email" id="student-email" class="form-control" required placeholder="student@olfu.edu.ph">
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <div>
+                            <label for="student-year">Year Level *</label>
+                            <select id="student-year" class="form-control" required>
+                                <option value="">Select Year Level</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="student-section">Section *</label>
+                            <select id="student-section" class="form-control" required>
+                                <option value="">Select Section</option>
+                                <option value="Dash 1">Dash 1</option>
+                                <option value="Dash 2">Dash 2</option>
+                                <option value="Dash 3">Dash 3</option>
+                                <option value="Dash 4">Dash 4</option>
+                                <option value="Irregular">Irregular</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">💾 Save Student</button>
                 </div>
             </form>
         </div>

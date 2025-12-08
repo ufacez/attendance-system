@@ -1,1 +1,2 @@
-id,student_id,student_name,date,status,notes
+id,student_id,student_name,year,section,date,status,notes
+1,1,Ean Paolo Espiritu,1st Year,Dash 1,2025-12-08,Present,

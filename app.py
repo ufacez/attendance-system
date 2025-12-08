@@ -15,12 +15,12 @@ def init_db():
     if not os.path.exists(DB_FILE):
         with open(DB_FILE, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['id', 'name', 'email', 'created_at'])
+            writer.writerow(['id', 'name', 'email', 'year', 'section', 'created_at'])
     
     if not os.path.exists(ATTENDANCE_FILE):
         with open(ATTENDANCE_FILE, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['id', 'student_id', 'student_name', 'date', 'status', 'notes'])
+            writer.writerow(['id', 'student_id', 'student_name', 'year', 'section', 'date', 'status', 'notes'])
 
 init_db()
 
@@ -73,6 +73,8 @@ def create_student():
             student_id,
             data['name'],
             data['email'],
+            data['year'],
+            data['section'],
             datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         ])
     
@@ -88,12 +90,14 @@ def update_student(student_id):
         if int(student['id']) == student_id:
             student['name'] = data['name']
             student['email'] = data['email']
+            student['year'] = data['year']
+            student['section'] = data['section']
             updated = True
             break
     
     if updated:
         with open(DB_FILE, 'w', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=['id', 'name', 'email', 'created_at'])
+            writer = csv.DictWriter(f, fieldnames=['id', 'name', 'email', 'year', 'section', 'created_at'])
             writer.writeheader()
             writer.writerows(students)
         return jsonify({'message': 'Student updated successfully'})
@@ -106,7 +110,7 @@ def delete_student(student_id):
     students = [s for s in students if int(s['id']) != student_id]
     
     with open(DB_FILE, 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=['id', 'name', 'email', 'created_at'])
+        writer = csv.DictWriter(f, fieldnames=['id', 'name', 'email', 'year', 'section', 'created_at'])
         writer.writeheader()
         writer.writerows(students)
     
@@ -115,10 +119,16 @@ def delete_student(student_id):
 @app.route('/api/attendance', methods=['GET'])
 def get_attendance():
     date_filter = request.args.get('date')
+    year_filter = request.args.get('year')
+    section_filter = request.args.get('section')
     attendance = read_attendance()
     
     if date_filter:
         attendance = [a for a in attendance if a['date'] == date_filter]
+    if year_filter:
+        attendance = [a for a in attendance if a['year'] == year_filter]
+    if section_filter:
+        attendance = [a for a in attendance if a['section'] == section_filter]
     
     return jsonify(attendance)
 
@@ -133,6 +143,8 @@ def mark_attendance():
             attendance_id,
             data['student_id'],
             data['student_name'],
+            data['year'],
+            data['section'],
             data.get('date', datetime.now().strftime('%Y-%m-%d')),
             data['status'],
             data.get('notes', '')
@@ -146,7 +158,7 @@ def delete_attendance(attendance_id):
     attendance = [a for a in attendance if int(a['id']) != attendance_id]
     
     with open(ATTENDANCE_FILE, 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=['id', 'student_id', 'student_name', 'date', 'status', 'notes'])
+        writer = csv.DictWriter(f, fieldnames=['id', 'student_id', 'student_name', 'year', 'section', 'date', 'status', 'notes'])
         writer.writeheader()
         writer.writerows(attendance)
     
@@ -154,11 +166,11 @@ def delete_attendance(attendance_id):
 
 @app.route('/api/export/students')
 def export_students():
-    return send_file(DB_FILE, as_attachment=True, download_name='students_export.csv')
+    return send_file(DB_FILE, as_attachment=True, download_name='bsit_students_export.csv')
 
 @app.route('/api/export/attendance')
 def export_attendance():
-    return send_file(ATTENDANCE_FILE, as_attachment=True, download_name='attendance_export.csv')
+    return send_file(ATTENDANCE_FILE, as_attachment=True, download_name='bsit_attendance_export.csv')
 
 if __name__ == '__main__':
     # Enable livereload for development
