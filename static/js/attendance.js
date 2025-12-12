@@ -37,9 +37,26 @@ async function loadStudents() {
 }
 
 function updateStudentDropdown() {
+    filterQuickStudents();
+}
+
+function filterQuickStudents() {
     const select = document.getElementById('quick-student');
+    const yearFilter = document.getElementById('quick-filter-year').value;
+    const sectionFilter = document.getElementById('quick-filter-section').value;
+    
+    let filteredStudents = students;
+    
+    if (yearFilter) {
+        filteredStudents = filteredStudents.filter(s => s.year === yearFilter);
+    }
+    
+    if (sectionFilter) {
+        filteredStudents = filteredStudents.filter(s => s.section === sectionFilter);
+    }
+    
     select.innerHTML = '<option value="">-- Select Student --</option>' + 
-        students.map(s => `
+        filteredStudents.map(s => `
             <option value="${s.id}" 
                     data-name="${s.name}" 
                     data-year="${s.year}" 

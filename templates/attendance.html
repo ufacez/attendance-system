@@ -84,7 +84,28 @@
                 <h3 class="card-title">Quick Mark Attendance</h3>
             </div>
             <div class="card-body">
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: end;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 2fr 1fr; gap: 20px; align-items: end; margin-bottom: 20px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Filter Year</label>
+                        <select id="quick-filter-year" class="form-control" onchange="filterQuickStudents()">
+                            <option value="">All Years</option>
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Filter Section</label>
+                        <select id="quick-filter-section" class="form-control" onchange="filterQuickStudents()">
+                            <option value="">All Sections</option>
+                            <option value="Dash 1">Dash 1</option>
+                            <option value="Dash 2">Dash 2</option>
+                            <option value="Dash 3">Dash 3</option>
+                            <option value="Dash 4">Dash 4</option>
+                            <option value="Irregular">Irregular</option>
+                        </select>
+                    </div>
                     <div class="form-group" style="margin-bottom: 0;">
                         <label class="form-label">Select Student</label>
                         <select id="quick-student" class="form-control">
@@ -96,22 +117,6 @@
                         <input type="date" id="attendance-date" class="form-control">
                     </div>
                 </div>
-                <div style="display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap;">
-                    <button class="btn btn-primary" onclick="quickMarkAttendance('Present')">
-                        <i class="bi bi-check-circle-fill"></i> Present
-                    </button>
-                    <button class="btn btn-danger" onclick="quickMarkAttendance('Absent')">
-                        <i class="bi bi-x-circle-fill"></i> Absent
-                    </button>
-                    <button class="btn" style="background: var(--warning); color: white;" onclick="quickMarkAttendance('Late')">
-                        <i class="bi bi-clock-fill"></i> Late
-                    </button>
-                    <button class="btn" style="background: var(--info); color: white;" onclick="quickMarkAttendance('Excused')">
-                        <i class="bi bi-file-text-fill"></i> Excused
-                    </button>
-                </div>
-            </div>
-        </div>
 
         <!-- Filters -->
         <div class="content-card" style="margin-bottom: 20px;">
