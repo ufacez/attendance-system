@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - BSIT HRMS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon">OF</div>
+                <div class="logo-text">
+                    <h1>BSIT HRMS</h1>
+                    <p>Attendance System</p>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a href="/dashboard" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <a href="/students" class="nav-link">
+                    <span class="nav-icon">👥</span>
+                    <span>Students</span>
+                </a>
+                <a href="/attendance" class="nav-link">
+                    <span class="nav-icon">✓</span>
+                    <span>Attendance</span>
+                </a>
+                <a href="/reports" class="nav-link active">
+                    <span class="nav-icon">📈</span>
+                    <span>Reports</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Other</div>
+                <a href="/" class="nav-link">
+                    <span class="nav-icon">🏠</span>
+                    <span>Landing Page</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <h2>Reports & Analytics</h2>
+            <p>View detailed statistics and export data</p>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-date">
+                <span>📅</span>
+                <span id="current-date"></span>
+            </div>
+            <div class="topbar-user">
+                <div class="user-avatar">A</div>
+                <div class="user-info">
+                    <div class="user-name">Administrator</div>
+                    <div class="user-role">System Admin</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Export Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">
+            <div class="content-card">
+                <div class="card-body" style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
+                    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Student Data</h3>
+                    <p style="color: var(--text-gray); margin-bottom: 20px;">Export all student information</p>
+                    <button class="btn btn-primary" onclick="exportStudents()">
+                        <span>⬇️</span> Download CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-body" style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
+                    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Attendance Records</h3>
+                    <p style="color: var(--text-gray); margin-bottom: 20px;">Export all attendance data</p>
+                    <button class="btn btn-primary" onclick="exportAttendance()">
+                        <span>⬇️</span> Download CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid" style="margin-bottom: 20px;">
+            <div class="stat-card primary">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-label">Total Students</div>
+                        <div class="stat-value" id="total-students">0</div>
+                    </div>
+                    <div class="stat-icon">👥</div>
+                </div>
+            </div>
+
+            <div class="stat-card info">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-label">Total Records</div>
+                        <div class="stat-value" id="total-records">0</div>
+                    </div>
+                    <div class="stat-icon">📋</div>
+                </div>
+            </div>
+
+            <div class="stat-card success">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-label">Present Today</div>
+                        <div class="stat-value" id="present-today">0</div>
+                    </div>
+                    <div class="stat-icon">✓</div>
+                </div>
+            </div>
+
+            <div class="stat-card danger">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-label">Absent Today</div>
+                        <div class="stat-value" id="absent-today">0</div>
+                    </div>
+                    <div class="stat-icon">✗</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Year Level Statistics -->
+        <div class="content-card" style="margin-bottom: 20px;">
+            <div class="card-header">
+                <h3 class="card-title">Year Level Distribution</h3>
+            </div>
+            <div class="card-body">
+                <div id="year-stats"></div>
+            </div>
+        </div>
+
+        <!-- Section Statistics -->
+        <div class="content-card">
+            <div class="card-header">
+                <h3 class="card-title">Section Distribution</h3>
+            </div>
+            <div class="card-body">
+                <div id="section-stats"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <span class="notification-icon">✓</span>
+            <span class="notification-message"></span>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+</body>
+</html>

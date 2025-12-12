@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students - BSIT HRMS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon">OF</div>
+                <div class="logo-text">
+                    <h1>BSIT HRMS</h1>
+                    <p>Attendance System</p>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a href="/dashboard" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <a href="/students" class="nav-link active">
+                    <span class="nav-icon">👥</span>
+                    <span>Students</span>
+                </a>
+                <a href="/attendance" class="nav-link">
+                    <span class="nav-icon">✓</span>
+                    <span>Attendance</span>
+                </a>
+                <a href="/reports" class="nav-link">
+                    <span class="nav-icon">📈</span>
+                    <span>Reports</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Other</div>
+                <a href="/" class="nav-link">
+                    <span class="nav-icon">🏠</span>
+                    <span>Landing Page</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <h2>Student Management</h2>
+            <p>Manage BSIT students by year level and section</p>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-date">
+                <span>📅</span>
+                <span id="current-date"></span>
+            </div>
+            <div class="topbar-user">
+                <div class="user-avatar">A</div>
+                <div class="user-info">
+                    <div class="user-name">Administrator</div>
+                    <div class="user-role">System Admin</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Action Bar -->
+        <div class="content-card" style="margin-bottom: 20px;">
+            <div class="card-body" style="padding: 16px 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <select id="filter-year" class="form-control" style="width: auto;">
+                            <option value="">All Years</option>
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                        </select>
+                        <select id="filter-section" class="form-control" style="width: auto;">
+                            <option value="">All Sections</option>
+                            <option value="Dash 1">Dash 1</option>
+                            <option value="Dash 2">Dash 2</option>
+                            <option value="Dash 3">Dash 3</option>
+                            <option value="Dash 4">Dash 4</option>
+                            <option value="Irregular">Irregular</option>
+                        </select>
+                        <button class="btn btn-secondary btn-sm" onclick="filterStudents()">Apply Filter</button>
+                        <button class="btn btn-secondary btn-sm" onclick="resetFilters()">Reset</button>
+                    </div>
+                    <button class="btn btn-primary" onclick="showAddStudentModal()">
+                        <span>➕</span>
+                        <span>Add Student</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students by Section -->
+        <div id="students-by-section">
+            <!-- This will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Add/Edit Student Modal -->
+    <div id="student-modal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-title">Add Student</h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <form id="student-form" onsubmit="saveStudent(event)">
+                    <div class="modal-body">
+                        <input type="hidden" id="student-id">
+                        <div class="form-group">
+                            <label class="form-label">Full Name *</label>
+                            <input type="text" id="student-name" class="form-control" required placeholder="Enter student full name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address *</label>
+                            <input type="email" id="student-email" class="form-control" required placeholder="student@olfu.edu.ph">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Year Level *</label>
+                                <select id="student-year" class="form-control" required>
+                                    <option value="">Select Year Level</option>
+                                    <option value="1st Year">1st Year</option>
+                                    <option value="2nd Year">2nd Year</option>
+                                    <option value="3rd Year">3rd Year</option>
+                                    <option value="4th Year">4th Year</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Section *</label>
+                                <select id="student-section" class="form-control" required>
+                                    <option value="">Select Section</option>
+                                    <option value="Dash 1">Dash 1</option>
+                                    <option value="Dash 2">Dash 2</option>
+                                    <option value="Dash 3">Dash 3</option>
+                                    <option value="Dash 4">Dash 4</option>
+                                    <option value="Irregular">Irregular</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Student</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <span class="notification-icon">✓</span>
+            <span class="notification-message"></span>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/students.js') }}"></script>
+</body>
+</html>

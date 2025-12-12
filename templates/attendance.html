@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance - BSIT HRMS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern.css') }}">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon">OF</div>
+                <div class="logo-text">
+                    <h1>BSIT HRMS</h1>
+                    <p>Attendance System</p>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a href="/dashboard" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <a href="/students" class="nav-link">
+                    <span class="nav-icon">👥</span>
+                    <span>Students</span>
+                </a>
+                <a href="/attendance" class="nav-link active">
+                    <span class="nav-icon">✓</span>
+                    <span>Attendance</span>
+                </a>
+                <a href="/reports" class="nav-link">
+                    <span class="nav-icon">📈</span>
+                    <span>Reports</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Other</div>
+                <a href="/" class="nav-link">
+                    <span class="nav-icon">🏠</span>
+                    <span>Landing Page</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <h2>Attendance Management</h2>
+            <p>Mark and track student attendance</p>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-date">
+                <span>📅</span>
+                <span id="current-date"></span>
+            </div>
+            <div class="topbar-user">
+                <div class="user-avatar">A</div>
+                <div class="user-info">
+                    <div class="user-name">Administrator</div>
+                    <div class="user-role">System Admin</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Quick Mark Attendance -->
+        <div class="content-card" style="margin-bottom: 20px;">
+            <div class="card-header">
+                <h3 class="card-title">Quick Mark Attendance</h3>
+            </div>
+            <div class="card-body">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: end;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Select Student</label>
+                        <select id="quick-student" class="form-control">
+                            <option value="">-- Select Student --</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label">Date</label>
+                        <input type="date" id="attendance-date" class="form-control">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="quickMarkAttendance('Present')">
+                        <span>✓</span> Present
+                    </button>
+                    <button class="btn btn-danger" onclick="quickMarkAttendance('Absent')">
+                        <span>✗</span> Absent
+                    </button>
+                    <button class="btn" style="background: var(--warning); color: white;" onclick="quickMarkAttendance('Late')">
+                        <span>⏰</span> Late
+                    </button>
+                    <button class="btn" style="background: var(--info); color: white;" onclick="quickMarkAttendance('Excused')">
+                        <span>📝</span> Excused
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="content-card" style="margin-bottom: 20px;">
+            <div class="card-body" style="padding: 16px 24px;">
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                    <input type="date" id="filter-date" class="form-control" style="width: auto;">
+                    <select id="filter-year" class="form-control" style="width: auto;">
+                        <option value="">All Years</option>
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                        <option value="3rd Year">3rd Year</option>
+                        <option value="4th Year">4th Year</option>
+                    </select>
+                    <select id="filter-section" class="form-control" style="width: auto;">
+                        <option value="">All Sections</option>
+                        <option value="Dash 1">Dash 1</option>
+                        <option value="Dash 2">Dash 2</option>
+                        <option value="Dash 3">Dash 3</option>
+                        <option value="Dash 4">Dash 4</option>
+                        <option value="Irregular">Irregular</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" onclick="filterAttendance()">Apply Filter</button>
+                    <button class="btn btn-secondary btn-sm" onclick="resetFilters()">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Records -->
+        <div class="content-card">
+            <div class="card-header">
+                <h3 class="card-title">Attendance Records</h3>
+                <span class="badge badge-info" id="record-count">0 records</span>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Student Name</th>
+                                <th>Year</th>
+                                <th>Section</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                                <th style="text-align: center;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendance-tbody">
+                            <tr>
+                                <td colspan="8" class="text-center" style="padding: 40px;">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">✓</div>
+                                        <div class="empty-state-text">No attendance records found</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <span class="notification-icon">✓</span>
+            <span class="notification-message"></span>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/attendance.js') }}"></script>
+</body>
+</html>

@@ -2,11 +2,12 @@ from flask import Flask, render_template, request, jsonify, send_file
 from livereload import Server
 import csv
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
+from collections import defaultdict
 
 app = Flask(__name__)
 
-# Database file
+# Database files
 DB_FILE = 'students.csv'
 ATTENDANCE_FILE = 'attendance.csv'
 
@@ -57,9 +58,67 @@ def read_attendance():
 def landing():
     return render_template('landing.html')
 
-@app.route('/index')
-def index():
-    return render_template('index.html')
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/students')
+def students_page():
+    return render_template('students.html')
+
+@app.route('/attendance')
+def attendance_page():
+    return render_template('attendance.html')
+
+@app.route('/reports')
+def reports_page():
+    return render_template('reports.html')
+
+# API Endpoints
+@app.route('/api/dashboard/stats', methods=['GET'])
+def get_dashboard_stats():
+    students = read_students()
+    attendance = read_attendance()
+    
+    # Calculate stats
+    total_students = len(students)
+    today = datetime.now().strftime('%Y-%m-%d')
+    today_attendance = [a for a in attendance if a['date'] == today]
+    
+    present_today = len([a for a in today_attendance if a['status'] == 'Present'])
+    absent_today = len([a for a in today_attendance if a['status'] == 'Absent'])
+    late_today = len([a for a in today_attendance if a['status'] == 'Late'])
+    
+    # Year level distribution
+    year_distribution = defaultdict(int)
+    for student in students:
+        year_distribution[student['year']] += 1
+    
+    # Section distribution
+    section_distribution = defaultdict(int)
+    for student in students:
+        section_distribution[student['section']] += 1
+    
+    # Weekly attendance trend (last 7 days)
+    weekly_trend = []
+    for i in range(6, -1, -1):
+        date = (datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d')
+        day_attendance = [a for a in attendance if a['date'] == date]
+        present = len([a for a in day_attendance if a['status'] == 'Present'])
+        weekly_trend.append({
+            'date': date,
+            'present': present
+        })
+    
+    return jsonify({
+        'total_students': total_students,
+        'present_today': present_today,
+        'absent_today': absent_today,
+        'late_today': late_today,
+        'year_distribution': dict(year_distribution),
+        'section_distribution': dict(section_distribution),
+        'weekly_trend': weekly_trend
+    })
 
 @app.route('/api/students', methods=['GET'])
 def get_students():
@@ -156,7 +215,6 @@ def mark_attendance():
     
     return jsonify({'message': 'Attendance marked successfully', 'id': attendance_id}), 201
 
-
 @app.route('/api/attendance/<int:attendance_id>', methods=['DELETE'])
 def delete_attendance(attendance_id):
     attendance = read_attendance()
@@ -176,20 +234,11 @@ def export_students():
 @app.route('/api/export/attendance')
 def export_attendance():
     return send_file(ATTENDANCE_FILE, as_attachment=True, download_name='bsit_attendance_export.csv')
-    
 
 if __name__ == '__main__':
-    # Enable livereload for development
     server = Server(app.wsgi_app)
-    
-    # Watch for changes in templates
     server.watch('templates/*.html')
-    
-    # Watch for changes in static files
     server.watch('static/css/*.css')
     server.watch('static/js/*.js')
-    
-    # Watch Python files
     server.watch('*.py')
-    
     server.serve(port=5000, host='localhost')
